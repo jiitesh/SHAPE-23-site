@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Display JSON data based on input</title>
+	<link rel="stylesheet" href="css/res_style.css">
+	<style>
+		#result_table{
+			border-collapse:collapse;
+			margin: 25px 0;
+			font-size: 0.9 em;
+			font-family: sans-serif;
+			min-width: 400px;
+			
+			box-shadow: 0 0 20px rgba(0,0,0,0.15);
+			opacity:120%;
+			background-color: aliceblue;
+		}
+		#result_table th tr{
+			color: #ffffff;
+			text-align: left;
+		}
+		#result_table th, #result_table td{
+			padding: 12px 15px;
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<nav class="navbar navbar-expand-lg">
+            <div class="container" style="display: float">
+                <a href="index.html" class="navbar-brand mx-auto mx-lg-0">
+                    <img src="images/resized-Sri_Sivasubramaniya_Nadar_College_of_Engineering.png" alt="">
+                    <span class="brand-text">Sri Sivasubramaniya Nadar <br> College Of Engineering </span>
+                </a>
+
+                <div class="collapse navbar-collapse" id="navbarNav" style="float: right;">
+                    <ul class="navbar-nav ms-auto" style="list-style-type: none;">
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="#section_1">HOME</a>
+                        </li>
+                    </ul>
+                <div>
+                        
+            </div>
+        </nav>
+	</header>
+	<br>
+	<br>
+	<div class="form-result">
+		<form class="res-class">
+			<div class="row">
+				<div class="col-25">
+					<label for="input">ENTER STUDENT NAME</label>
+				</div>
+				<div class="col-75">
+					<input type="text" id="input" placeholder="Enter the same name as entered in the previous form(once done click the button below)">
+				</div>
+			</div>
+			<br><br>
+			<div class="row">
+				<button type="button" class="result-btn"onclick="displayData()">Alloted Prjoect</button>
+			</div>
+		</form>
+	</div>
+
+	<div id="output"></div>
+
+	<script>
+		function displayData() {
+			var input = document.getElementById("input"). value;
+			var request = new XMLHttpRequest();
+			request.open("GET", "person_projects.json", true);
+			request.onload = function() {
+				if (request.status == 200) {
+					var data = JSON.parse(request.responseText);
+					var output = document.getElementById("output");
+          console.log(data);
+          console.log(data.students)
+          data=data.students
+					for (var i = 0; i < data.length; i++) {
+						if (data[i].name == input) {
+							output.innerHTML = '<table id="result_table"> <tr> <th>Name</th><th>category</th><th>Project Title</th><th>department</th><th>Guide Name</th><th>Guide Email</th><th>Guide Phone Number</th></tr>'+
+							"<tr><td>" + data[i].name+" " + "</td><td>"+data[i].category+" " +"</td><td>"+data[i].title+" "+"</td><td>"+data[i].department+" " +"</td><td>"+data[i].guide_name+" " +"</td><td>"+data[i].email+" " +"</td><td>"+" " +" " +data[i].phone+"</td></tr></table>"
+							+ "<br>"+"<b>Kindly Note down the above details and contact your respective guides. All the best!!<b>";
+							return;
+						}
+					}
+					output.innerHTML = "Kindly recheck if the given name matches with the name entered in the gform";
+				}
+			}
+			request.send();
+		}
+	</script>
+</body>
+</html>
